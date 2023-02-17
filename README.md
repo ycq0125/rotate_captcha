@@ -1,2 +1,12 @@
-# rotate_captcha
-solve Rotate Captcha
+双旋转验证码解决方案
+================================================
+
+通过比对边缘像素点色差，均匀取旋转角度查看所有像素点最小色差和即为最合适的旋转角度，注意本项目存在一定误差，如有其他更优方式可以提供，可以私聊作者或提交pr
+
+- inner_image_brg - 最外层大图path.
+- outer_image_brg - 内层小图path.
+- result_img - 图片输出path.
+- angle - 平均检测角度，越小越细化
+- default_dis - 取边缘处的像素点距离
+
+
