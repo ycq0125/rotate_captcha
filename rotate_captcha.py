@@ -90,64 +90,60 @@ def discern(inner_image_brg, outer_image_brg, result_img=None, ):
         all_deviation.append(total_deviation)
     result = all_deviation.index(min(all_deviation))
     print(result)
-
     if result_img:
-        # result = 158
         inner = rotate(inner_image_brg, -result)  # 顺时针
         outer = rotate(outer_image_brg, result)
         left_point = outer.shape[0] / 2 - inner.shape[0] / 2
         right_point = outer.shape[0] / 2 + inner.shape[0] / 2
         replace_area = outer[int(left_point):int(right_point), int(left_point):int(right_point)]
         outer[int(left_point):int(right_point), int(left_point):int(right_point)] = replace_area + inner
-        # cv2.imshow('result', outer)
         cv2.imwrite(result_img, outer)
     return result
+
 
 def crop_to_square(image):
     height, width = image.shape[:2]
     size = min(height, width)
     start_y = (height - size) // 2
     start_x = (width - size) // 2
-    cropped = image[start_y:start_y+size, start_x:start_x+size]
+    cropped = image[start_y:start_y + size, start_x:start_x + size]
     return cropped
 
-def single_discern(inner_image_brg, outer_image_brg, result_img=None, ):
-    inner_image_brg = cv2.imread(inner_image_brg)
-    outer_image_brg = cv2.imread(outer_image_brg)
+
+def single_discern(inner_image_brg_path, outer_image_brg_path, result_img=None, pic_circle_radius=100):
+    # 实际图片圆半径 pic_circle_radius
+    inner_image_brg = cv2.imread(inner_image_brg_path)
+    outer_image_brg = cv2.imread(outer_image_brg_path)
     inner_image = cv2.cvtColor(inner_image_brg, cv2.COLOR_BGR2HSV)
     outer_image = cv2.cvtColor(outer_image_brg, cv2.COLOR_BGR2HSV)
     outer_image = crop_to_square(outer_image)
-    # cv2.imshow('inner_source', inner_image)
-    # cv2.imshow('outer_source', outer_image)
     all_deviation = []
-    for result in range(0, 180):
+    for result in range(0, 360):
         inner = rotate(inner_image, -result)  # 顺时针
         outer = rotate(outer_image, 0)
-        inner_circle_point_px = circle_point_px(inner, 1, 95)
-        outer_circle_point_px = circle_point_px(outer, 1, 105)
-        total_deviation = 0
-        for i in range(len(inner_circle_point_px)):
-            in_px = inner_circle_point_px[i]
-            out_px = outer_circle_point_px[i]
-            deviation = HSVDistance(in_px, out_px)
-            total_deviation += deviation
+        inner_circle_point_px = circle_point_px(inner, 1, pic_circle_radius - 5)
+        outer_circle_point_px = circle_point_px(outer, 1, pic_circle_radius + 5)
+        total_deviation = np.sum(
+            [HSVDistance(in_px, out_px) for in_px, out_px in zip(inner_circle_point_px, outer_circle_point_px)])
         all_deviation.append(total_deviation)
+
     result = all_deviation.index(min(all_deviation))
     print(result)
 
     if result_img:
-        # result = 158
         inner = rotate(inner_image_brg, -result)  # 顺时针
         outer = rotate(outer_image_brg, 0)
         outer = crop_to_square(outer)
-        left_point = outer.shape[0] / 2 - inner.shape[0] / 2
-        right_point = outer.shape[0] / 2 + inner.shape[0] / 2
-        replace_area = outer[int(left_point):int(right_point), int(left_point):int(right_point)]
-        outer[int(left_point):int(right_point), int(left_point):int(right_point)] = replace_area + inner
-        # cv2.imshow('result', outer)
+        size = inner.shape[0]
+        left_point = int((outer.shape[0] - size) / 2)
+        right_point = left_point + size
+        replace_area = outer[left_point:right_point, left_point:right_point].copy()
+        outer[left_point:right_point, left_point:right_point] = replace_area + inner
         cv2.imwrite(result_img, outer)
+
     return result
+
 
 if __name__ == '__main__':
     # discern('./imgs/inner_8.png', './imgs/outer_8.png', './imgs/result.png')
-    single_discern('./imgs/inner.png', './imgs/outer.png', './imgs/result.png')
+    single_discern('./imgs/inner_10.png', './imgs/outer_10.png', './imgs/result.png')
