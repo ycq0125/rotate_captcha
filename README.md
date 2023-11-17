@@ -22,5 +22,5 @@
         </a>
     </center>
 </h3>
-Supporting all common and well known captcha types and a success rate of over 99%, CapSolver allows for affordable AI-based captcha solving with JS/TS clients as well as HTTP support. Their packages are extremely affordable for projects of any size, offering a free trial to test out their service.
+[Capsolver](https://www.capsolver.com/) offers a wide variety of solutions to meet various requirements. Covering everything from the widely-used reCAPTCHA to more specialized types such as DataDome, FunCaptcha, hCaptcha, aws captcha and more, they have mastered the skill of captcha solving. If you're looking to get around recaptcha, hcaptcha, or even funcaptcha, Capsolver is your dependable option for bypassing captchas.
 <hr>
