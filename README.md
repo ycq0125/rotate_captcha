@@ -18,7 +18,7 @@
         <b>CapSolver.com</b>
         <br>
         <a href="https://capsolver.com">
-            <img src="https://i.imgur.com/YaRmSt4.gif" alt="Capsolver's Banner">
+            <img src="https://cdn.discordapp.com/attachments/1173683153538392214/1174968261666938920/goodgif.gif?ex=65698577&is=65571077&hm=f994ad332705597ff5476c0546436a778e1c9ceb7feea39e019c7be0e05050ea&" alt="Capsolver's Banner">
         </a>
     </center>
 </h3>
