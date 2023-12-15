@@ -78,18 +78,19 @@ def crop_to_square(image):
 
 
 @timer
-def discern(inner_image_brg, outer_image_brg, result_img=None, isSingle=False):
+def discern(inner_image_brg, outer_image_brg, result_img=None, pic_circle_radius=None, isSingle=False):
     inner_image_brg = cv2.imread(inner_image_brg)
     outer_image_brg = cv2.imread(outer_image_brg)
     inner_image = cv2.cvtColor(inner_image_brg, cv2.COLOR_BGR2HSV)
     outer_image = cv2.cvtColor(outer_image_brg, cv2.COLOR_BGR2HSV)
     all_deviation = []
+    pic_circle_radius = pic_circle_radius if pic_circle_radius else (inner.shape[0] // 2)
     total = 360 if isSingle else 180
     for result in range(0, total):
         inner = rotate(inner_image, -result)
         outer = rotate(outer_image, 0 if isSingle else result)
-        inner_circle_point_px = circle_point_px(inner, 1, (inner.shape[0] // 2) - 5)
-        outer_circle_point_px = circle_point_px(outer, 1, (inner.shape[0] // 2) + 5)
+        inner_circle_point_px = circle_point_px(inner, 1, pic_circle_radius - 5)
+        outer_circle_point_px = circle_point_px(outer, 1, pic_circle_radius + 5)
         total_deviation = np.sum(
             [HSVDistance(in_px, out_px) for in_px, out_px in zip(inner_circle_point_px, outer_circle_point_px)])
         all_deviation.append(total_deviation)
@@ -111,4 +112,5 @@ def discern(inner_image_brg, outer_image_brg, result_img=None, isSingle=False):
 
 if __name__ == '__main__':
     # discern('./imgs/inner_8.png', './imgs/outer_8.png', './imgs/result.png')
-    discern('./imgs/inner_13.png', './imgs/outer_13.png', './imgs/result.png', isSingle=True)
+    # discern('./imgs/inner_13.png', './imgs/outer_13.png', './imgs/result.png', isSingle=True)
+    discern('./imgs/inner_14.png', './imgs/outer_14.png', './imgs/result.png', isSingle=True)
